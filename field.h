@@ -18,6 +18,8 @@ signals:
 
 public slots:
 
+protected:
+    bool eventFilter(QObject *watched, QEvent * e);
 };
 
 #endif // FIELD_H

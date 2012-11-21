@@ -12,10 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOtev_t, SIGNAL(activated()), this, SLOT(otevriKrizovku()));
 
     for (int i = 0; i<5; ++i)
-    {
-        Field * policko = new Field();
-        ui->fields->addWidget(policko->widget,1,i,1,1);
-    }
+        for (int j = 0; j<5; ++j)
+        {
+            Field * policko = new Field();
+            //connect(policko->widget, SIGNAL(), policko->widget, SLOT());
+            ui->fields->addWidget(policko->widget,i,j,1,1);
+        }
 }
 
 MainWindow::~MainWindow()
