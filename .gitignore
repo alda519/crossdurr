@@ -7,3 +7,5 @@ core
 *.core
 *.autosave
 itu2.pro.user
+Makefile
+itu2
