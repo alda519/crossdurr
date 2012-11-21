@@ -9,10 +9,11 @@ class Field : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Field(QWidget *parent = 0);
-    QWidget * widget;
-    QLineEdit * edit;
-    QVBoxLayout * vbox;
+    explicit Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent = 0);
+    QLineEdit * edit; // tady je pismenko
+    QVBoxLayout * vbox; // layout ve widgetu policka
+    int xpos, ypos; // pozice tohoto policka v matici policek
+    QVector< QVector<Field *> > * policka; // pointer na layout vsech policek
 
 signals:
 

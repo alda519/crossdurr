@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <field.h>
 
 namespace Ui {
 class MainWindow;
@@ -14,10 +15,12 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+    QVector< QVector<Field *> > * policka;
     ~MainWindow();
     
 private:
     Ui::MainWindow *ui;
+
 
 public slots:
     void otevriKrizovku();
