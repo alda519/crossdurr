@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionKonec,SIGNAL(activated()), this, SLOT(close()));
     connect(ui->actionOtev_t, SIGNAL(activated()), this, SLOT(otevriKrizovku()));
 
-    for (int i; i<5; ++i)
+    for (int i = 0; i<5; ++i)
     {
         Field * policko = new Field();
         ui->fields->addWidget(policko->widget,1,i,1,1);
