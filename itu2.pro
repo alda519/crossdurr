@@ -12,10 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    otevri.cpp
+    otevri.cpp \
+    field.cpp
 
 HEADERS  += mainwindow.h \
-    otevri.h
+    otevri.h \
+    field.h
 
 FORMS    += mainwindow.ui \
     otevri.ui

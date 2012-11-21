@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "field.h"
 #include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,6 +10,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->actionKonec,SIGNAL(activated()), this, SLOT(close()));
     connect(ui->actionOtev_t, SIGNAL(activated()), this, SLOT(otevriKrizovku()));
+
+    for (int i; i<5; ++i)
+    {
+        Field * policko = new Field();
+        ui->fields->addWidget(policko->widget,1,i,1,1);
+    }
 }
 
 MainWindow::~MainWindow()
