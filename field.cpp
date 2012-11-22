@@ -9,8 +9,10 @@ Field::Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent
     edit->installEventFilter(this);
     edit->setMaximumWidth(50);
     edit->setMaximumHeight(50);
-    edit->setText("aa");
+    edit->setText("A");
     edit->setReadOnly(true);
+    edit->setContextMenuPolicy(Qt::PreventContextMenu);
+    edit->setStyleSheet( "color:black; background-color:white" );
 
     edit->setAlignment(Qt::AlignHCenter | Qt::AlignCenter);
     //edit->setInputMask(">");
@@ -60,16 +62,25 @@ bool Field::eventFilter(QObject *watched, QEvent *e)
         else if ((k->key () == Qt::Key_Up) && (ypos != 0) )
             policka->at(ypos-1)[xpos]->edit->setFocus();
 
-        //qDebug() << "left" << xpos << policka->at(ypos)[xpos]->edit->text();
+        //qDebug() << "left" << xpos << polickaAt(xpos,ypos)->edit->text();
 
         else if (k->key () == Qt::Key_Delete)
             edit->setText("");
+
+        //else if (k->key () == Qt::Key_Tab)
+
         //if(k->key() >= Qt::Key_A && k->key() <= Qt::Key_Z) {
-        else
+        else if (!(k->text().isEmpty()) && (k->key() != Qt::Key_Tab))
             edit->setText(k->text().toUpper());
         qDebug() << k->text();
             filtered = true;//eat event
         //}
     }
     return filtered & false;
+}
+
+
+Field * Field::polickaAt(int x,int y)
+{
+    return policka->at(y)[x];
 }

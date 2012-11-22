@@ -14,6 +14,7 @@ public:
     QVBoxLayout * vbox; // layout ve widgetu policka
     int xpos, ypos; // pozice tohoto policka v matici policek
     QVector< QVector<Field *> > * policka; // pointer na layout vsech policek
+    Field * polickaAt(int x,int y);
 
 signals:
 
