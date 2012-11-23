@@ -85,9 +85,41 @@ bool Field::eventFilter(QObject *watched, QEvent *e)
         else if (k->key () == Qt::Key_Delete)
             edit->setText("");
 
+        // home end atd. se muze hodit
+        else if(k->key() == Qt::Key_Home) {
+            newy = ypos;
+            newx = 0;
+            policka->at(newy)[newx]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_End) {
+            newy = ypos;
+            newx = policka->at(ypos).count()-1;
+            policka->at(newy)[newx]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_PageUp) {
+            newy = 0;
+            newx = xpos;
+            policka->at(newy)[newx]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_PageDown) {
+            newy = policka->count()-1;
+            newx = xpos;
+            policka->at(newy)[newx]->edit->setFocus();
+        }
+
+        // backspace smaze predchozi znak a da na nej focus
         else if (k->key () == Qt::Key_Backspace) {
-            // TODO jeste by se to mohlo samo vracet
-            edit->setText("");
+            if(state == HORIZONTAL && (xpos > 0)) {
+                policka->at(ypos)[xpos-1]->edit->setFocus();
+                newy = ypos;
+                newx = xpos-1;
+                policka->at(ypos)[xpos-1]->edit->setText("");
+            } else if(state == VERTICAL && (ypos > 0)) {
+                policka->at(ypos-1)[xpos]->edit->setFocus();
+                newy = ypos-1;
+                newx = xpos;
+                policka->at(ypos-1)[xpos]->edit->setText("");
+            }
         }
 
         // napsani pismene
