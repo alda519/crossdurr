@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Field * policka[5][5];
 
-    int krizovkaWidth = 15, krizovkaHeight = 7;
+    krizovkaWidth = 15;
+    krizovkaHeight = 7;
 
     setMinimumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
     setMaximumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
@@ -26,7 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     wiwi->addWidget(new QLineEdit());
     wiwi->addWidget(new QLabel("Vyska"));
     wiwi->addWidget(new QLineEdit());
-    wiwi->addWidget(new QPushButton(QString("Nastavit")));
+    QPushButton * newKrizovkaBtn = new QPushButton(QString("Nastavit"));
+    wiwi->addWidget(newKrizovkaBtn);
       // tajenka
     wiwi->addWidget(new QLabel("Tajenka"));
     wiwi->addWidget(new QLineEdit());
@@ -35,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wiwi->addWidget(new QPushButton("Dokocit"));
     ui->widget->setLayout(wiwi);
 
+    /*
     // vytvoreni nove mrizky policek
     policka = new QVector< QVector<Field *> > ;
     for (int i = 0; i < krizovkaHeight; ++i)
@@ -42,16 +45,16 @@ MainWindow::MainWindow(QWidget *parent) :
         QVector<Field *> *policka_buf = new QVector<Field *>;
 
         for (int j = 0; j < krizovkaWidth; ++j)
-        {            
+        {
             Field * policko = new Field(j,i,policka);
             policka_buf->append(policko);
-            //connect(policko->widget, SIGNAL(), policko->widget, SLOT());
             ui->fields->addWidget(policko,i,j,1,1);
         }
-
         policka->append(*policka_buf);
-
     }
+    */
+
+    connect(newKrizovkaBtn, SIGNAL(pressed()), this, SLOT(novaKrizovka()));
 }
 
 MainWindow::~MainWindow()
@@ -63,4 +66,27 @@ void MainWindow::otevriKrizovku()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
         QString::fromUtf8("Otevři Křížovku"), "", "Soubory XML(*.xml)");
+}
+
+void MainWindow::novaKrizovka()
+{
+    // smazat co uz tam je
+    // TODO
+    //delete policka->at(4)[4];
+
+    // vytvoreni nove mrizky policek
+    policka = new QVector< QVector<Field *> > ;
+    for (int i = 0; i < krizovkaHeight; ++i)
+    {
+        QVector<Field *> *policka_buf = new QVector<Field *>;
+
+        for (int j = 0; j < krizovkaWidth; ++j)
+        {
+            Field * policko = new Field(j,i,policka);
+            policka_buf->append(policko);
+            ui->fields->addWidget(policko,i,j,1,1);
+        }
+        policka->append(*policka_buf);
+    }
+
 }
