@@ -13,12 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Field * policka[5][5];
 
-    krizovkaWidth = 15;
-    krizovkaHeight = 7;
+    krizovkaWidth = 0;
+    krizovkaHeight = 0;
 
-    setMinimumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
-    setMaximumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
-    //resize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52 );s
+    setMinimumSize(40 + 160 + 5 * 52, 150 + 5 * 52);
+    setMaximumSize(40 + 160 + 5 * 52, 150 + 5 * 52);
 
     // leve menu
     QVBoxLayout * wiwi = new QVBoxLayout;
@@ -37,23 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     wiwi->addWidget(new QPushButton("Dokocit"));
     ui->widget->setLayout(wiwi);
 
-    /*
-    // vytvoreni nove mrizky policek
-    policka = new QVector< QVector<Field *> > ;
-    for (int i = 0; i < krizovkaHeight; ++i)
-    {
-        QVector<Field *> *policka_buf = new QVector<Field *>;
-
-        for (int j = 0; j < krizovkaWidth; ++j)
-        {
-            Field * policko = new Field(j,i,policka);
-            policka_buf->append(policko);
-            ui->fields->addWidget(policko,i,j,1,1);
-        }
-        policka->append(*policka_buf);
-    }
-    */
-
     connect(newKrizovkaBtn, SIGNAL(pressed()), this, SLOT(novaKrizovka()));
 }
 
@@ -71,8 +53,14 @@ void MainWindow::otevriKrizovku()
 void MainWindow::novaKrizovka()
 {
     // smazat co uz tam je
-    // TODO
-    //delete policka->at(4)[4];
+    for (int i = 0; i < krizovkaHeight; ++i) {
+        for (int j = 0; j < krizovkaWidth; ++j) {
+            delete policka->at(i)[j];
+        }
+    }
+
+    krizovkaWidth = 15;
+    krizovkaHeight = 7;
 
     // vytvoreni nove mrizky policek
     policka = new QVector< QVector<Field *> > ;
@@ -89,4 +77,6 @@ void MainWindow::novaKrizovka()
         policka->append(*policka_buf);
     }
 
+    setMinimumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
+    setMaximumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
 }
