@@ -71,6 +71,14 @@ void MainWindow::novaKrizovka()
         for (int j = 0; j < krizovkaWidth; ++j)
         {
             Field * policko = new Field(j,i,policka);
+
+            // docasne obarveni kraju nez bude jiny typ
+            if(i == 0 || j == 0) {
+                policko->setStyleSheet("background-color: #ffcccc;");
+                QFont * font =  new QFont;
+                policko->setFont(*font);
+            }
+
             policka_buf->append(policko);
             ui->fields->addWidget(policko,i,j,1,1);
         }
