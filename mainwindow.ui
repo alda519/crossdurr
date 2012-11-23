@@ -20,11 +20,19 @@
    <string>Křížovky za Áčko</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="1">
      <layout class="QGridLayout" name="fields">
       <item row="0" column="0">
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QWidget" name="widget_2" native="true">
+        <zorder>widget</zorder>
+       </widget>
       </item>
      </layout>
     </item>
@@ -52,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>695</width>
-     <height>25</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSoubor">

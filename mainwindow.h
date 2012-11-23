@@ -20,7 +20,7 @@ public:
     
 private:
     Ui::MainWindow *ui;
-
+    int krizovkaWidth, krizovkaHeight;
 
 public slots:
     void otevriKrizovku();

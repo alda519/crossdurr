@@ -9,7 +9,7 @@ Field::Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent
     edit->installEventFilter(this);
     edit->setMaximumWidth(50);
     edit->setMaximumHeight(50);
-    edit->setText("A");
+    edit->setText("");
     edit->setReadOnly(true);
     edit->setContextMenuPolicy(Qt::PreventContextMenu);
     edit->setStyleSheet( "color:black; background-color:white" );
@@ -21,7 +21,6 @@ Field::Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent
     QFont * f = new QFont();
     f->setPointSize(25);
     edit->setFont(*f);
-
 
     vbox = new QVBoxLayout();
     vbox->setMargin(0);
@@ -40,40 +39,107 @@ Field::Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent
 bool Field::eventFilter(QObject *watched, QEvent *e)
 {
     static int x;
+    static int state = HORIZONTAL;
+
     bool filtered = false;
     if (e->type () == QEvent::KeyPress)
     {
         QKeyEvent* k = (QKeyEvent*) e;
-
+        int newx = -1, newy = -1;
 
         // doleva
-        if ((k->key () == Qt::Key_Left) && (xpos != 0))
+        if ((k->key () == Qt::Key_Left) && (xpos != 0)) {
             policka->at(ypos)[xpos-1]->edit->setFocus();
+            newy = ypos;
+            newx = xpos-1;
+        }
 
         // doprava
-        else if ((k->key () == Qt::Key_Right) && (xpos < (policka->at(ypos).count()-1)))
+        else if ((k->key () == Qt::Key_Right) && (xpos < (policka->at(ypos).count()-1))) {
             policka->at(ypos)[xpos+1]->edit->setFocus();
+            newy = ypos;
+            newx = xpos+1;
+        }
 
         // dolu
-        else if ((k->key () == Qt::Key_Down) && (ypos < (policka->count()-1)))
+        else if ((k->key () == Qt::Key_Down) && (ypos < (policka->count()-1))) {
             policka->at(ypos+1)[xpos]->edit->setFocus();
+            newy = ypos+1;
+            newx = xpos;
+        }
 
         // nahoru
-        else if ((k->key () == Qt::Key_Up) && (ypos != 0) )
+        else if ((k->key () == Qt::Key_Up) && (ypos != 0) ) {
             policka->at(ypos-1)[xpos]->edit->setFocus();
+            newy = ypos-1;
+            newx = xpos;
+        }
 
-        //qDebug() << "left" << xpos << polickaAt(xpos,ypos)->edit->text();
+        // preklopeni horizont./vertikal.
+        else if(k->key () == Qt::Key_Return) {
+            state = ! state;
+            newx = xpos;
+            newy = ypos;
+        }
 
         else if (k->key () == Qt::Key_Delete)
             edit->setText("");
 
-        //else if (k->key () == Qt::Key_Tab)
+        else if (k->key () == Qt::Key_Backspace) {
+            // TODO jeste by se to mohlo samo vracet
+            edit->setText("");
+        }
 
-        //if(k->key() >= Qt::Key_A && k->key() <= Qt::Key_Z) {
-        else if (!(k->text().isEmpty()) && (k->key() != Qt::Key_Tab))
+        // napsani pismene
+        else if (!(k->text().isEmpty()) && (k->key() != Qt::Key_Tab)) {
             edit->setText(k->text().toUpper());
+            // samo posunout na dalsi pismeno, pripadne slovo
+            if(state == HORIZONTAL) {
+                if (xpos < (policka->at(ypos).count()-1)) {
+                    policka->at(ypos)[xpos+1]->edit->setFocus();
+                    newy = ypos;
+                    newx = xpos+1;
+                } else if((ypos < (policka->count()-1))) {
+                    policka->at(ypos+1)[0]->edit->setFocus();
+                    newy = ypos+1;
+                    newx = 0;
+                }
+            } else if(state == VERTICAL) {
+                if (ypos < (policka->count()-1)) {
+                    policka->at(ypos+1)[xpos]->edit->setFocus();
+                    newy = ypos+1;
+                    newx = xpos;
+                } else if (xpos < (policka->at(ypos).count()-1)) {
+                    policka->at(0)[xpos+1]->edit->setFocus();
+                    newy = 0;
+                    newx = xpos+1;
+                }
+            }
+        }
+
+        //qDebug() << "left" << xpos << polickaAt(xpos,ypos)->edit->text();
         qDebug() << k->text();
-            filtered = true;//eat event
+
+        // vyreseni stylovani tech policekr
+        if(newx != -1 && newy != -1) {
+            // smazani stylu
+            for(int i = 0; i < (policka->at(ypos).count()); ++i)
+                for(int j = 0; j < (policka->count()); ++j)
+                    policka->at(j)[i]->edit->setStyleSheet("");
+
+            // zvyrazneni radku / TODO sloupce
+            if(state == HORIZONTAL) { // radek / sloupec
+                for(int i = 0; i < (policka->at(ypos).count()); ++i)
+                    policka->at(newy)[i]->edit->setStyleSheet("border: 1px solid red");
+            } else {
+                for(int i = 0; i < (policka->count()); ++i)
+                    policka->at(i)[newx]->edit->setStyleSheet("border: 1px solid red");
+            }
+            // zvyrazneni policka
+            policka->at(newy)[newx]->edit->setStyleSheet("border: 3px solid red");
+        }
+
+        filtered = true;//eat event
         //}
     }
     return filtered & false;

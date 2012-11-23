@@ -24,4 +24,6 @@ protected:
     bool eventFilter(QObject *watched, QEvent * e);
 };
 
+enum { HORIZONTAL, VERTICAL };
+
 #endif // FIELD_H
