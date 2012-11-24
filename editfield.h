@@ -9,11 +9,11 @@ public:
     EditField(int x, int y, QVector<QVector<Field *> > *fields, QWidget *parent = 0);
     QLineEdit * editLE;
 
+    bool decorate(bool force = true);
+
 protected:
     bool eventFilter(QObject *watched, QEvent * e);
 
-private:
-    void highlight();
 };
 
 #endif // EDITFIELD_H

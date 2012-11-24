@@ -18,23 +18,25 @@ MainWindow::MainWindow(QWidget *parent) :
     krizovkaWidth = 0;
     krizovkaHeight = 0;
 
-    setMinimumSize(40 + 160 + 5 * 52, 150 + 5 * 52);
-    setMaximumSize(40 + 160 + 5 * 52, 150 + 5 * 52);
+    setMinimumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
+    setMaximumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
 
     // leve menu
     QVBoxLayout * wiwi = new QVBoxLayout;
       // nastaveni velikosti
     wiwi->addWidget(new QLabel("Sirka"));
-    //QLineEdit * widthLE = new QLineEdit();
-    //widthLE->set;
-    wiwi->addWidget(new QLineEdit());
+    kSirka = new QLineEdit("15");
+    kVyska = new QLineEdit("10");
+    wiwi->addWidget(kSirka);
     wiwi->addWidget(new QLabel("Vyska"));
-    wiwi->addWidget(new QLineEdit());
+    wiwi->addWidget(kVyska);
     QPushButton * newKrizovkaBtn = new QPushButton(QString("Nastavit"));
     wiwi->addWidget(newKrizovkaBtn);
       // tajenka
     wiwi->addWidget(new QLabel("Tajenka"));
-    wiwi->addWidget(new QLineEdit());
+    tAjenka = new QTextEdit("DESNE SUPER TAJENKA");
+    tAjenka->setMaximumWidth(160);
+    wiwi->addWidget(tAjenka);
     wiwi->addWidget(new QPushButton(QString("Umistit")));
       // cervene tlacitko
     wiwi->addWidget(new QPushButton("Dokocit"));
@@ -63,8 +65,10 @@ void MainWindow::novaKrizovka()
         }
     }
 
-    krizovkaWidth = 15;
-    krizovkaHeight = 7;
+    krizovkaHeight = kVyska->text().toInt();
+    krizovkaWidth = kSirka->text().toInt();
+    //krizovkaWidth = 15;
+    //krizovkaHeight = 7;
 
     // vytvoreni nove mrizky policek
     policka = new QVector< QVector<Field *> > ;
@@ -76,7 +80,7 @@ void MainWindow::novaKrizovka()
         {
             Field * policko;
             // po okraji jsou rovnou policka s
-            if(i == 0 || j == 0) {
+            if(i == 0 || j == 0 || i + 3 == j) {
                 policko = new QuestField(j, i, policka);
             } else {
                 policko = new EditField(j, i, policka);
@@ -89,4 +93,6 @@ void MainWindow::novaKrizovka()
 
     setMinimumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
     setMaximumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
+
+    //policka->at(1)[1]->edit->setFocus();
 }

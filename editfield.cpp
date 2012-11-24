@@ -26,24 +26,12 @@ EditField::EditField(int x, int y, QVector< QVector<Field *> > * fields, QWidget
     type = EDITFIELD;
 }
 
-void EditField::highlight()
+bool EditField::decorate(bool force)
 {
-    // smazani stylu
-    for(int i = 0; i < (policka->at(ypos).count()); ++i)
-        for(int j = 0; j < (policka->count()); ++j)
-            policka->at(j)[i]->edit->setStyleSheet("");
-
-    // zvyrazneni radku / TODO sloupce
-    if(state == HORIZONTAL) { // radek / sloupec
-        for(int i = 0; i < (policka->at(ypos).count()); ++i)
-            policka->at(ypos)[i]->edit->setStyleSheet("border: 1px solid red");
-    } else {
-        for(int i = 0; i < (policka->count()); ++i)
-            policka->at(i)[xpos]->edit->setStyleSheet("border: 1px solid red");
-    }
-    // zvyrazneni policka
-    policka->at(ypos)[xpos]->edit->setStyleSheet("border: 3px solid red");
+    edit->setStyleSheet("border: 1px solid red");
+    return true;
 }
+
 
 bool EditField::eventFilter(QObject *watched, QEvent *e)
 {

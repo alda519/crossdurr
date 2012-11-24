@@ -19,6 +19,13 @@ public:
     static int state;
     int type;
 
+    QString * baseStyle;
+    void setBaseStyleSheet();
+    virtual bool decorate(bool force = true);
+
+protected:
+    void highlight();
+
 signals:
 
 public slots:

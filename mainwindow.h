@@ -21,7 +21,8 @@ public:
 private:
     Ui::MainWindow *ui;
     int krizovkaWidth, krizovkaHeight;
-
+    QLineEdit * kSirka, * kVyska;
+    QTextEdit * tAjenka;
 public slots:
     void otevriKrizovku();
     void novaKrizovka();

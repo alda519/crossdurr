@@ -8,6 +8,9 @@ class QuestField : public Field
 public:
     QuestField(int x, int y, QVector<QVector<Field *> > *fields, QWidget *parent = 0);
     QTextEdit * editTE;
+
+    bool decorate(bool force);
+
 signals:
 
 public slots:
