@@ -80,7 +80,7 @@ void MainWindow::novaKrizovka()
         {
             Field * policko;
             // po okraji jsou rovnou policka s
-            if(i == 0 || j == 0 || i + 3 == j) {
+            if(i == 0 || j == 0 || i + 3 == j || 13- i == j) {
                 policko = new QuestField(j, i, policka);
             } else {
                 policko = new EditField(j, i, policka);

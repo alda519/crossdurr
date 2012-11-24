@@ -39,33 +39,75 @@ bool QuestField::eventFilter(QObject *watched, QEvent *e)
     bool filtered = false;
 
     if(e->type() == QEvent::FocusIn) {
-        highlight();
+
         qDebug() << "Focus QuestField " << xpos << "x" << ypos;
-    /*
+
         if(state == HORIZONTAL) {
-            if((xpos < (policka->at(ypos).count()-1)) && policka->at(ypos)[xpos+1]->type == EDITFIELD)
-                ((QLineEdit *)(policka->at(ypos)[xpos+1]->edit))->setFocus();
-            else if((ypos < (policka->count()-1)) && policka->at(ypos+1)[xpos]->type == EDITFIELD) {
+            if((xpos < (policka->at(ypos).count()-1)) && policka->at(ypos)[xpos+1]->type != EDITFIELD)
                 state = ! state;
-                ((QLineEdit *)(policka->at(ypos+1)[xpos]->edit))->setFocus();
-            }
+            if(xpos == (policka->at(ypos).count()-1))
+                state = ! state;
         } else if(state == VERTICAL) {
-            if((ypos < (policka->count()-1)) && policka->at(ypos+1)[xpos]->type == EDITFIELD)
-                ((QLineEdit *)(policka->at(ypos+1)[xpos]->edit))->setFocus();
-             else if((xpos < (policka->at(ypos).count()-1)) && policka->at(ypos)[xpos+1]->type == EDITFIELD) {
+            if((ypos < (policka->count()-1)) && policka->at(ypos+1)[xpos]->type != EDITFIELD)
                 state = ! state;
-                ((QLineEdit *)(policka->at(ypos)[xpos+1]->edit))->setFocus();
-            }
+            if(ypos == (policka->count()-1))
+                state = ! state;
         }
-    */
-        // TODO kdyz chytne highlight ve smeru, kde to nejde, tak by se mel preklopit
+        highlight();
     }
     if (e->type () == QEvent::KeyPress)
     {
         QKeyEvent* k = (QKeyEvent*) e;
-        if(k->key () == Qt::Key_Return) {
+
+        if ((k->key () == Qt::Key_Left) && (xpos != 0)) {
+            policka->at(ypos)[xpos-1]->edit->setFocus();
+        } else if ((k->key () == Qt::Key_Right) && (xpos < (policka->at(ypos).count()-1))) {
+            policka->at(ypos)[xpos+1]->edit->setFocus();
+        } else if ((k->key () == Qt::Key_Down) && (ypos < (policka->count()-1))) {
+            policka->at(ypos+1)[xpos]->edit->setFocus();
+        } else if ((k->key () == Qt::Key_Up) && (ypos != 0) ) {
+            policka->at(ypos-1)[xpos]->edit->setFocus();
+        } else if(k->key () == Qt::Key_Return) {
             state = ! state;
             highlight();
+        } else if(k->key() == Qt::Key_Home) {
+            qDebug() << "HOME";
+            policka->at(ypos)[0]->edit->setFocus();
+        } else if(k->key() == Qt::Key_End) {
+            policka->at(ypos)[policka->at(ypos).count()-1]->edit->setFocus();
+        } else if(k->key() == Qt::Key_PageUp) {
+            policka->at(0)[xpos]->edit->setFocus();
+        } else if(k->key() == Qt::Key_PageDown) {
+            policka->at(policka->count()-1)[xpos]->edit->setFocus();
+        } else if (k->key () == Qt::Key_Backspace) {
+            if(state == HORIZONTAL && (xpos > 0)) {
+                policka->at(ypos)[xpos-1]->edit->setFocus();
+                if(policka->at(ypos)[xpos-1]->type == EDITFIELD)
+                    ((QLineEdit *)(policka->at(ypos)[xpos-1]->edit))->setText("");
+            } else if(state == VERTICAL && (ypos > 0)) {
+                policka->at(ypos-1)[xpos]->edit->setFocus();
+                if(policka->at(ypos-1)[xpos]->type == EDITFIELD)
+                    ((QLineEdit *)(policka->at(ypos-1)[xpos]->edit))->setText("");
+            }
+        } else if (!(k->text().isEmpty()) && (k->key() != Qt::Key_Tab)) {
+            // samo posunout na dalsi pismeno, pripadne slovo
+            if(state == HORIZONTAL) {
+                if (xpos < (policka->at(ypos).count()-1) && policka->at(ypos)[xpos+1]->type == EDITFIELD) {
+                    ((QLineEdit*)(policka->at(ypos)[xpos+1]->edit))->setText(k->text().toUpper());
+                    if(xpos < (policka->at(ypos).count()-2))
+                        policka->at(ypos)[xpos+2]->edit->setFocus();
+                    else
+                        policka->at(ypos)[xpos+1]->edit->setFocus();
+                }
+            } else if(state == VERTICAL) {
+                if (ypos < (policka->count()-1) && policka->at(ypos+1)[xpos]->type == EDITFIELD) {
+                    ((QLineEdit*)(policka->at(ypos+1)[xpos]->edit))->setText(k->text().toUpper());
+                    if(ypos < (policka->count()-2))
+                        policka->at(ypos+2)[xpos]->edit->setFocus();
+                    else
+                        policka->at(ypos+1)[xpos]->edit->setFocus();
+                }
+            }
         }
         // TODO
         //  kdyz se napise pismeno, tak se umisti ve smeru state a focus poskoci o 2 jinak se focus nebude predavat nikde
