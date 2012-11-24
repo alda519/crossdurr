@@ -1,0 +1,142 @@
+#include "editfield.h"
+
+EditField::EditField(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
+    Field(x, y, fields, parent)
+{
+    editLE = new QLineEdit();
+    edit = editLE;
+    editLE->installEventFilter(this);
+    editLE->setMaximumWidth(50);
+    editLE->setMaximumHeight(50);
+    editLE->setText("");
+    editLE->setReadOnly(true);
+    editLE->setContextMenuPolicy(Qt::PreventContextMenu);
+    editLE->setStyleSheet( "color:black; background-color:white" );
+
+    editLE->setAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+    editLE->setMaxLength(1);
+
+    QFont * f = new QFont();
+    f->setPointSize(25);
+    edit->setFont(*f);
+
+    if(x != 0 || y != 0)
+        vbox->addWidget(edit);
+
+    type = EDITFIELD;
+}
+
+void EditField::highlight()
+{
+    // smazani stylu
+    for(int i = 0; i < (policka->at(ypos).count()); ++i)
+        for(int j = 0; j < (policka->count()); ++j)
+            policka->at(j)[i]->edit->setStyleSheet("");
+
+    // zvyrazneni radku / TODO sloupce
+    if(state == HORIZONTAL) { // radek / sloupec
+        for(int i = 0; i < (policka->at(ypos).count()); ++i)
+            policka->at(ypos)[i]->edit->setStyleSheet("border: 1px solid red");
+    } else {
+        for(int i = 0; i < (policka->count()); ++i)
+            policka->at(i)[xpos]->edit->setStyleSheet("border: 1px solid red");
+    }
+    // zvyrazneni policka
+    policka->at(ypos)[xpos]->edit->setStyleSheet("border: 3px solid red");
+}
+
+bool EditField::eventFilter(QObject *watched, QEvent *e)
+{
+    Q_UNUSED(watched);
+    bool filtered = false;
+    if(e->type() == QEvent::FocusIn) {
+        qDebug() << "Focus EditField " << xpos << "x" << ypos;
+        highlight();
+    }
+
+    if (e->type () == QEvent::KeyPress)
+    {
+        QKeyEvent* k = (QKeyEvent*) e;
+
+        // doleva
+        if ((k->key () == Qt::Key_Left) && (xpos != 0)) {
+            policka->at(ypos)[xpos-1]->edit->setFocus();
+        }
+
+        // doprava
+        else if ((k->key () == Qt::Key_Right) && (xpos < (policka->at(ypos).count()-1))) {
+            policka->at(ypos)[xpos+1]->edit->setFocus();
+        }
+
+        // dolu
+        else if ((k->key () == Qt::Key_Down) && (ypos < (policka->count()-1))) {
+            policka->at(ypos+1)[xpos]->edit->setFocus();
+        }
+
+        // nahoru
+        else if ((k->key () == Qt::Key_Up) && (ypos != 0) ) {
+            policka->at(ypos-1)[xpos]->edit->setFocus();
+        }
+
+        // preklopeni horizont./vertikal.
+        else if(k->key () == Qt::Key_Return) {
+            state = ! state;
+            highlight();
+        }
+
+        else if (k->key () == Qt::Key_Delete)
+            editLE->setText("");
+
+        // home end atd. se muze hodit
+        else if(k->key() == Qt::Key_Home) {
+            qDebug() << "HOME";
+            policka->at(ypos)[0]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_End) {
+            policka->at(ypos)[policka->at(ypos).count()-1]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_PageUp) {
+            policka->at(0)[xpos]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_PageDown) {
+            policka->at(policka->count()-1)[xpos]->edit->setFocus();
+        }
+
+        // backspace smaze predchozi znak a da na nej focus
+        else if (k->key () == Qt::Key_Backspace) {
+            if(state == HORIZONTAL && (xpos > 0)) {
+                policka->at(ypos)[xpos-1]->edit->setFocus();
+                if(policka->at(ypos)[xpos-1]->type == EDITFIELD)
+                    ((QLineEdit *)(policka->at(ypos)[xpos-1]->edit))->setText("");
+            } else if(state == VERTICAL && (ypos > 0)) {
+                policka->at(ypos-1)[xpos]->edit->setFocus();
+                if(policka->at(ypos-1)[xpos]->type == EDITFIELD)
+                    ((QLineEdit *)(policka->at(ypos-1)[xpos]->edit))->setText("");
+            }
+        }
+
+        // napsani pismene
+        else if (!(k->text().isEmpty()) && (k->key() != Qt::Key_Tab)) {
+            editLE->setText(k->text().toUpper());
+            // samo posunout na dalsi pismeno, pripadne slovo
+            if(state == HORIZONTAL) {
+                if (xpos < (policka->at(ypos).count()-1)) {
+                    policka->at(ypos)[xpos+1]->edit->setFocus();
+                } else if((ypos < (policka->count()-1))) {
+                    policka->at(ypos+1)[0]->edit->setFocus();
+                }
+            } else if(state == VERTICAL) {
+                if (ypos < (policka->count()-1)) {
+                    policka->at(ypos+1)[xpos]->edit->setFocus();
+                } else if (xpos < (policka->at(ypos).count()-1)) {
+                    policka->at(0)[xpos+1]->edit->setFocus();
+                }
+            }
+        }
+
+        qDebug() << k->text();
+
+        filtered = true;//eat event
+    }
+    return filtered & false;
+}

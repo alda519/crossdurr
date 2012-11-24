@@ -13,11 +13,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     otevri.cpp \
-    field.cpp
+    field.cpp \
+    editfield.cpp \
+    questfield.cpp
 
 HEADERS  += mainwindow.h \
     otevri.h \
-    field.h
+    field.h \
+    editfield.h \
+    questfield.h
 
 FORMS    += mainwindow.ui \
     otevri.ui

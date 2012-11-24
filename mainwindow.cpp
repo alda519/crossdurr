@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "field.h"
+#include "questfield.h"
+#include "editfield.h"
 #include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -23,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout * wiwi = new QVBoxLayout;
       // nastaveni velikosti
     wiwi->addWidget(new QLabel("Sirka"));
+    //QLineEdit * widthLE = new QLineEdit();
+    //widthLE->set;
     wiwi->addWidget(new QLineEdit());
     wiwi->addWidget(new QLabel("Vyska"));
     wiwi->addWidget(new QLineEdit());
@@ -70,15 +74,13 @@ void MainWindow::novaKrizovka()
 
         for (int j = 0; j < krizovkaWidth; ++j)
         {
-            Field * policko = new Field(j,i,policka);
-
-            // docasne obarveni kraju nez bude jiny typ
+            Field * policko;
+            // po okraji jsou rovnou policka s
             if(i == 0 || j == 0) {
-                policko->setStyleSheet("background-color: #ffcccc;");
-                QFont * font =  new QFont;
-                policko->setFont(*font);
+                policko = new QuestField(j, i, policka);
+            } else {
+                policko = new EditField(j, i, policka);
             }
-
             policka_buf->append(policko);
             ui->fields->addWidget(policko,i,j,1,1);
         }
