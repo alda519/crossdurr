@@ -106,7 +106,7 @@ bool EditField::eventFilter(QObject *watched, QEvent *e)
             editLE->setText("");
             if(state == HORIZONTAL && (xpos < (policka->at(ypos).count()-1)))
                 policka->at(ypos)[xpos+1]->edit->setFocus();
-            else if(state == HORIZONTAL && (xpos < (policka->count()-1)))
+            else if(state == VERTICAL && (ypos < (policka->count()-1)))
                 policka->at(ypos+1)[xpos]->edit->setFocus();
         }
 

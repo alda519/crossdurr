@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wiwi->addWidget(kSirka);
     wiwi->addWidget(new QLabel("Vyska"));
     wiwi->addWidget(kVyska);
-    QPushButton * newKrizovkaBtn = new QPushButton(QString("Nastavit"));
+    QPushButton * newKrizovkaBtn = new QPushButton(QString("Nastavit velikost"));
     wiwi->addWidget(newKrizovkaBtn);
       // tajenka
     wiwi->addWidget(new QLabel("Tajenka"));
@@ -38,13 +38,14 @@ MainWindow::MainWindow(QWidget *parent) :
     tAjenka->setMaximumWidth(160);
     tAjenka->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     wiwi->addWidget(tAjenka);
-    wiwi->addWidget(new QPushButton(QString("Umistit")));
+    wiwi->addWidget(new QPushButton(QString("Umistit tajenku")));
         // tooly
     wiwi->addWidget(new QRadioButton("AAAA"));
     wiwi->addWidget(new QRadioButton("BBBB"));
     wiwi->addWidget(new QRadioButton("CCCC"));
       // cervene tlacitko
-    QPushButton * finishBtn = new QPushButton("Dokocit");
+    QPushButton * finishBtn = new QPushButton("Dokocit krizovku");
+    finishBtn->setStyleSheet("background-color: #ff3333;");
     wiwi->addWidget(finishBtn);
     ui->widget->setLayout(wiwi);
 

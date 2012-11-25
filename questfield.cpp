@@ -41,7 +41,14 @@ void QuestField::setText(QString text)
 
 void QuestField::setRandomText()
 {
-    editTE->setText("NEJAKA BLBOST\nFOO");
+    // hackity hack
+    std::string pole[40] = {
+        "sloni zub", "svazek klesti", "narez", "hnetat", "zesileny zapor", "druh pocitacoveho konektoru",
+        "cast svu", "lezet anglicky", "carodejova zeme", "vytvoren", "ilona domacky", "model",
+        "televizni kabelovy kanal", "amplituda", "kujny material", "sedivy", "osklivost", "chytat zver",
+        "inicialy zpevacky vondrackove", "zasevany", "takove mnozstvi",
+    };
+    editTE->setText(QString(pole[rand()%20].c_str()).toUpper());
 }
 
 bool QuestField::eventFilter(QObject *watched, QEvent *e)
@@ -117,7 +124,7 @@ bool QuestField::eventFilter(QObject *watched, QEvent *e)
             } else if(state == VERTICAL) {
                 if (ypos < (policka->count()-1) && policka->at(ypos+1)[xpos]->type == EDITFIELD) {
                     if(k->key() == Qt::Key_Space)
-                        policka->at(ypos)[xpos+1]->setText("");
+                        policka->at(ypos+1)[xpos]->setText("");
                     else
                         policka->at(ypos+1)[xpos]->setText(k->text().toUpper());
                     if(ypos < (policka->count()-2))
