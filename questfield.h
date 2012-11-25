@@ -10,6 +10,8 @@ public:
     QTextEdit * editTE;
 
     bool decorate(bool force);
+    void setText(QString text);
+    void setRandomText();
 
 signals:
 

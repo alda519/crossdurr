@@ -28,8 +28,21 @@ EditField::EditField(int x, int y, QVector< QVector<Field *> > * fields, QWidget
 
 bool EditField::decorate(bool force)
 {
+    Q_UNUSED(force);
     edit->setStyleSheet("border: 1px solid red");
     return true;
+}
+
+void EditField::setText(QString text)
+{
+    editLE->setText(text);
+}
+
+void EditField::setRandomText()
+{
+    char x = rand() % 26 + 'A';
+    if(editLE->text().length() == 0)
+        editLE->setText(QString::fromAscii(&x, 1));
 }
 
 
@@ -88,6 +101,13 @@ bool EditField::eventFilter(QObject *watched, QEvent *e)
         }
         else if(k->key() == Qt::Key_PageDown) {
             policka->at(policka->count()-1)[xpos]->edit->setFocus();
+        }
+        else if(k->key() == Qt::Key_Space) {
+            editLE->setText("");
+            if(state == HORIZONTAL && (xpos < (policka->at(ypos).count()-1)))
+                policka->at(ypos)[xpos+1]->edit->setFocus();
+            else if(state == HORIZONTAL && (xpos < (policka->count()-1)))
+                policka->at(ypos+1)[xpos]->edit->setFocus();
         }
 
         // backspace smaze predchozi znak a da na nej focus

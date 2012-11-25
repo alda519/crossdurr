@@ -10,6 +10,8 @@ public:
     QLineEdit * editLE;
 
     bool decorate(bool force = true);
+    void setText(QString text = "");
+    void setRandomText();
 
 protected:
     bool eventFilter(QObject *watched, QEvent * e);

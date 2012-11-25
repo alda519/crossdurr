@@ -26,6 +26,7 @@ private:
 public slots:
     void otevriKrizovku();
     void novaKrizovka();
+    void vyplnitNesmyslama();
 };
 
 #endif // MAINWINDOW_H

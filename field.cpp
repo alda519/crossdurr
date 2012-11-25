@@ -64,6 +64,18 @@ void Field::highlight()
 
 bool Field::decorate(bool force)
 {
+    Q_UNUSED(force);
     qDebug() << "Tohle se nema nikdy stat";
     return false;
+}
+
+void Field::setText(QString text)
+{
+    Q_UNUSED(text);
+    qDebug() << "Tohle se nema nikdy stat";
+}
+
+void Field::setRandomText()
+{
+    qDebug() << "Tohle se nema nikdy stat";
 }

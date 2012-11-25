@@ -36,13 +36,20 @@ MainWindow::MainWindow(QWidget *parent) :
     wiwi->addWidget(new QLabel("Tajenka"));
     tAjenka = new QTextEdit("DESNE SUPER TAJENKA");
     tAjenka->setMaximumWidth(160);
+    tAjenka->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     wiwi->addWidget(tAjenka);
     wiwi->addWidget(new QPushButton(QString("Umistit")));
+        // tooly
+    wiwi->addWidget(new QRadioButton("AAAA"));
+    wiwi->addWidget(new QRadioButton("BBBB"));
+    wiwi->addWidget(new QRadioButton("CCCC"));
       // cervene tlacitko
-    wiwi->addWidget(new QPushButton("Dokocit"));
+    QPushButton * finishBtn = new QPushButton("Dokocit");
+    wiwi->addWidget(finishBtn);
     ui->widget->setLayout(wiwi);
 
     connect(newKrizovkaBtn, SIGNAL(pressed()), this, SLOT(novaKrizovka()));
+    connect(finishBtn, SIGNAL(pressed()), this, SLOT(vyplnitNesmyslama()));
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +63,8 @@ void MainWindow::otevriKrizovku()
         QString::fromUtf8("Otevři Křížovku"), "", "Soubory XML(*.xml)");
 }
 
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 void MainWindow::novaKrizovka()
 {
     // smazat co uz tam je
@@ -67,8 +76,6 @@ void MainWindow::novaKrizovka()
 
     krizovkaHeight = kVyska->text().toInt();
     krizovkaWidth = kSirka->text().toInt();
-    //krizovkaWidth = 15;
-    //krizovkaHeight = 7;
 
     // vytvoreni nove mrizky policek
     policka = new QVector< QVector<Field *> > ;
@@ -91,8 +98,17 @@ void MainWindow::novaKrizovka()
         policka->append(*policka_buf);
     }
 
-    setMinimumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
-    setMaximumSize(40 + 160 + krizovkaWidth * 52, 150 + krizovkaHeight * 52);
+    // resize okna a nastaveni nejakych minimalnich rozmeru, funguje to blbe, ale aspon neco
+    setMinimumSize(40 + 160 + MAX(krizovkaWidth,5) * 52, 150 + MAX(krizovkaHeight, 5) * 52);
+    setMaximumSize(40 + 160 + MAX(krizovkaWidth,5) * 52, 150 + MAX(krizovkaHeight, 5) * 52);
+}
 
-    //policka->at(1)[1]->edit->setFocus();
+
+void MainWindow::vyplnitNesmyslama()
+{
+    for (int i = 0; i < krizovkaHeight; ++i) {
+        for (int j = 0; j < krizovkaWidth; ++j) {
+            policka->at(i)[j]->setRandomText();
+        }
+    }
 }

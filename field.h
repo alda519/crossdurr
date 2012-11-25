@@ -22,6 +22,8 @@ public:
     QString * baseStyle;
     void setBaseStyleSheet();
     virtual bool decorate(bool force = true);
+    virtual void setText(QString text = "FOO");
+    virtual void setRandomText();
 
 protected:
     void highlight();

@@ -9,6 +9,7 @@ Hurr durr super project.
 - vytvareni krizovek jeste neumi
     - zadat a zobrazit tam nejak tajenku
     - editovat policka se zadanim
+    - menit typ policek v mrizce
 - reseni krizovek
     - vymyslet co s levym menu (dat pryc / dat tam takove veci jako napovedu a dalsi blbosti, co jsme navymysleli)
     - zvyraznit policka, kde je tajenka
