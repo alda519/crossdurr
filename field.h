@@ -43,4 +43,29 @@ enum { HORIZONTAL, VERTICAL };
 
 enum { UNKNOWNFIELD, EDITFIELD, QUESTFIELD, TAJENKAFIELD, SYMBOLFIELD} ;
 
+
+// podedenej QTextEdit aby se mohla osetrovat MousePressEvent v zadani slov
+class PolickoZadani : public QTextEdit
+{
+public:
+    PolickoZadani(Field *);
+    Field *policko;
+    void mousePressEvent(QMouseEvent *);
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void focusOutEvent(QFocusEvent *e);
+
+};
+
+// odedenej QLineEdit aby se mohla osetrovat MousePressEvent u pismenek
+class PolickoPismenko : public QLineEdit
+{
+public:
+    PolickoPismenko(Field *);
+    Field *policko;
+    void mousePressEvent(QMouseEvent *);
+    void mouseDoubleClickEvent(QMouseEvent *);
+
+};
+
+
 #endif // FIELD_H

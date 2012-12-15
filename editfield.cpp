@@ -3,9 +3,10 @@
 EditField::EditField(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
     Field(x, y, fields, parent)
 {
-    editLE = new QLineEdit();
+    editLE = new PolickoPismenko(this);
     edit = editLE;
     editLE->installEventFilter(this);
+    editLE->setMouseTracking(true);
     editLE->setMaximumWidth(50);
     editLE->setMaximumHeight(50);
     editLE->setText("");
@@ -53,11 +54,8 @@ bool EditField::eventFilter(QObject *watched, QEvent *e)
     if(e->type() == QEvent::FocusIn) {
         qDebug() << "Focus EditField " << xpos << "x" << ypos;
 
-        if (*aktualniNastroj!= UNKNOWNFIELD)
-            changeFieldType(*aktualniNastroj);
-        else
-            highlight();
-        filtered = true;
+
+        highlight();
     }
 
     if (e->type () == QEvent::KeyPress)
@@ -120,11 +118,11 @@ bool EditField::eventFilter(QObject *watched, QEvent *e)
             if(state == HORIZONTAL && (xpos > 0)) {
                 policka->at(ypos)[xpos-1]->edit->setFocus();
                 if(policka->at(ypos)[xpos-1]->type == EDITFIELD)
-                    ((QLineEdit *)(policka->at(ypos)[xpos-1]->edit))->setText("");
+                    ((PolickoPismenko *)(policka->at(ypos)[xpos-1]->edit))->setText("");
             } else if(state == VERTICAL && (ypos > 0)) {
                 policka->at(ypos-1)[xpos]->edit->setFocus();
                 if(policka->at(ypos-1)[xpos]->type == EDITFIELD)
-                    ((QLineEdit *)(policka->at(ypos-1)[xpos]->edit))->setText("");
+                    ((PolickoPismenko *)(policka->at(ypos-1)[xpos]->edit))->setText("");
             }
         }
 

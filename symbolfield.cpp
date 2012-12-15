@@ -3,9 +3,10 @@
 SymbolField::SymbolField(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
     Field(x, y, fields, parent)
 {
-    editLE = new QLineEdit();
+    editLE = new PolickoPismenko(this);
     edit = editLE;
     editLE->installEventFilter(this);
+    editLE->setMouseTracking(true);
     editLE->setMaximumWidth(50);
     editLE->setMaximumHeight(50);
     editLE->setText("*");
@@ -52,12 +53,7 @@ bool SymbolField::eventFilter(QObject *watched, QEvent *e)
     bool filtered = false;
     if(e->type() == QEvent::FocusIn) {
         qDebug() << "Focus SymbolField " << xpos << "x" << ypos;
-
-        if (*aktualniNastroj!= UNKNOWNFIELD)
-            changeFieldType(*aktualniNastroj);
-        else
-            highlight();
-        filtered = true;
+        highlight();
     }
     if (e->type () == QEvent::KeyPress)
     {

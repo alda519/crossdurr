@@ -128,3 +128,39 @@ void Field::changeFieldType(int newType)
 
     }
 }
+
+
+PolickoZadani::PolickoZadani(Field * pPolicko): policko(pPolicko) {}
+
+void PolickoZadani::mousePressEvent(QMouseEvent *)
+{
+    qDebug() << "mouse click";
+    if (*(policko->aktualniNastroj)!= UNKNOWNFIELD)
+        policko->changeFieldType(*(policko->aktualniNastroj));
+}
+
+void PolickoZadani::mouseDoubleClickEvent(QMouseEvent *)
+{
+    setReadOnly(false);
+    removeEventFilter(policko);
+}
+
+void PolickoZadani::focusOutEvent(QFocusEvent *e)
+{
+    setReadOnly(true);
+    installEventFilter(policko);
+}
+
+PolickoPismenko::PolickoPismenko(Field * pPolicko): policko(pPolicko) {}
+
+void PolickoPismenko::mousePressEvent(QMouseEvent *)
+{
+    qDebug() << "mouse click";
+    if (*(policko->aktualniNastroj)!= UNKNOWNFIELD)
+        policko->changeFieldType(*(policko->aktualniNastroj));
+}
+
+void PolickoPismenko::mouseDoubleClickEvent(QMouseEvent *)
+{
+    qDebug() << "mouse double click";
+}

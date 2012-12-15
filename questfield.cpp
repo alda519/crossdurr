@@ -7,14 +7,14 @@ QuestField::QuestField(int x, int y, QVector< QVector<Field *> > * fields, QWidg
 {
     QFont * f = new QFont();
     f->setPointSize(7);
-    editTE = new QTextEdit();
+    editTE = new PolickoZadani(this);
     edit = editTE;
     editTE->setFont(*f);
     editTE->setText("NEJAKY BLBY TEXT");
     editTE->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     editTE->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     editTE->setContextMenuPolicy(Qt::PreventContextMenu);
-    editTE->installEventFilter(this);
+    editTE->installEventFilter(this);    
     editTE->setReadOnly(true);
 
     if(x != 0 || y != 0) {
@@ -71,11 +71,8 @@ bool QuestField::eventFilter(QObject *watched, QEvent *e)
             if(ypos == (policka->count()-1))
                 state = ! state;
         }
-        if (*aktualniNastroj!= UNKNOWNFIELD)
-            changeFieldType(*aktualniNastroj);
-        else
-            highlight();
-        filtered = true;
+
+        highlight();
     }
     if (e->type () == QEvent::KeyPress)
     {

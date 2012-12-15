@@ -7,7 +7,7 @@ class SymbolField : public Field
 {
 public:
     SymbolField(int x, int y, QVector<QVector<Field *> > *fields, QWidget *parent = 0);
-    QLineEdit * editLE;
+    PolickoPismenko * editLE;
 
     bool decorate(bool force = true);
     void setText(QString text = "");
