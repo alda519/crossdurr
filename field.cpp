@@ -1,6 +1,9 @@
 #include <QtGui>
 #include "field.h"
-
+#include "editfield.h"
+#include "questfield.h"
+#include "tajenkafield.h"
+#include "symbolfield.h"
 
 Field::Field(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
     QWidget(parent)
@@ -43,7 +46,7 @@ void Field::highlight()
     for(int i = 0; i < (policka->at(ypos).count()); ++i)
         for(int j = 0; j < (policka->count()); ++j)
             if(policka->at(j)[i]->type != UNKNOWNFIELD)
-               policka->at(j)[i]->setBaseStyleSheet();
+                policka->at(j)[i]->setBaseStyleSheet();
 
     // zvyrazneni radku / TODO sloupce
     if(state == HORIZONTAL) { // radek / sloupec
@@ -57,8 +60,12 @@ void Field::highlight()
     // zvyrazneni policka
     if(policka->at(ypos)[xpos]->type == QUESTFIELD)
         policka->at(ypos)[xpos]->edit->setStyleSheet("background-color: #ffcccc;");
-    else if(policka->at(ypos)[xpos]->type == EDITFIELD)
+    else if (policka->at(ypos)[xpos]->type == EDITFIELD)
         policka->at(ypos)[xpos]->edit->setStyleSheet("border: 3px solid red");
+    else if (policka->at(ypos)[xpos]->type == TAJENKAFIELD)
+        policka->at(ypos)[xpos]->edit->setStyleSheet("border: 3px solid red; background-color:yellow;");
+    else if (policka->at(ypos)[xpos]->type == SYMBOLFIELD)
+        policka->at(ypos)[xpos]->edit->setStyleSheet("background-color: #ffcccc;");
 }
 
 
@@ -78,4 +85,46 @@ void Field::setText(QString text)
 void Field::setRandomText()
 {
     qDebug() << "Tohle se nema nikdy stat";
+}
+
+void Field::changeFieldType(int newType)
+{
+    if (type != newType)
+    {
+        Field *newField;
+        switch (newType)
+        {
+        case EDITFIELD:
+            newField = new EditField(xpos,ypos,policka);
+            break;
+        case QUESTFIELD:
+            newField = new QuestField(xpos,ypos,policka);
+            break;
+        case TAJENKAFIELD:
+            newField = new tajenkaField(xpos,ypos,policka);
+            break;
+        case SYMBOLFIELD:
+            newField = new SymbolField(xpos,ypos,policka);
+            break;
+        case UNKNOWNFIELD:
+            return;
+        default:
+            qDebug() << "Tohle se nema nikdy stat";
+            return;
+        }
+
+        newField->mrizka = mrizka;
+        newField->aktualniNastroj = aktualniNastroj;
+
+        // da se pryc stary widget a na jeho misto prijde novy
+        mrizka->removeWidget(mrizka->itemAtPosition(ypos,xpos)->widget());
+        mrizka->addWidget(newField,ypos,xpos,1,1);
+
+        // a jeste se prohodi stary s novym v matici policek
+        (*policka)[ypos].replace(xpos,newField);
+
+        // chtelo by to neco jako toto, jinak to bude celkem slusne leakovat
+        //delete this;
+
+    }
 }

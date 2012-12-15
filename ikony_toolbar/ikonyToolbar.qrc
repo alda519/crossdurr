@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>pismeno.png</file>
+        <file>slovo.png</file>
+        <file>symbol.png</file>
+        <file>tajenka.png</file>
+        <file>kurzor.png</file>
+    </qresource>
+</RCC>

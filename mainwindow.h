@@ -20,24 +20,26 @@ public:
 
     QVBoxLayout *listaVytvareni;            // bocni lista vlevo co se zobrazuje pri vytvareni krizvoky
     QVBoxLayout *listaLusteni;              // bocni lista vlevo co se zobrazuje pri lusteni krizovky
+    int* aktualniNastroj;
 
     void vytvorVytvareciListu();
     void vytvorLusticiListu();
+    void smazWidget(int x,int y);
+
+    enum { OZNACOVANI, EDITFIELD, QUESTFIELD, TAJENKAFIELD, SYMBOLFIELD} ;
     
 private:
     Ui::MainWindow *ui;
     int krizovkaWidth, krizovkaHeight;
+
+    // veci z listy vlevo
     QLineEdit * kSirka, * kVyska;
     QTextEdit * tAjenka;
-
-    // tlacitka s modama
-    QToolBar * tools;
-    QActionGroup *actTools;
-    QAction *actEdit;
-    QAction *actTajenka;
-    QAction *actSymbol;
-    QAction *actQuest;
-    void createActions();
+    QRadioButton *radioPismeno;
+    QRadioButton *radioTajenka;
+    QRadioButton *radioSymbol;
+    QRadioButton *radioZadani;
+    QRadioButton *radioOznacovani;
 
 
 public slots:
@@ -47,10 +49,14 @@ public slots:
     void zobrazVytvareciListu();
     void zobrazLusticiListu();
 
-    void selectEdit();
-    void selectTajenka();
-    void selectSymbol();
-    void selectQuest();
+    void umistitTajenku();
+
+    void nastavNastrojPismeno();
+    void nastavNastrojTajenka();
+    void nastavNastrojZadani();
+    void nastavNastrojSymbol();
+    void nastavNastrojOznacovani();
+
 
 };
 

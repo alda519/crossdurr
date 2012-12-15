@@ -1,76 +1,58 @@
-#include <QtGui>
-#include "questfield.h"
-#include "field.h"
+#include "symbolfield.h"
 
-QuestField::QuestField(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
+SymbolField::SymbolField(int x, int y, QVector< QVector<Field *> > * fields, QWidget *parent) :
     Field(x, y, fields, parent)
 {
-    QFont * f = new QFont();
-    f->setPointSize(7);
-    editTE = new QTextEdit();
-    edit = editTE;
-    editTE->setFont(*f);
-    editTE->setText("NEJAKY BLBY TEXT");
-    editTE->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    editTE->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    editTE->setContextMenuPolicy(Qt::PreventContextMenu);
-    editTE->installEventFilter(this);
-    editTE->setReadOnly(true);
+    editLE = new QLineEdit();
+    edit = editLE;
+    editLE->installEventFilter(this);
+    editLE->setMaximumWidth(50);
+    editLE->setMaximumHeight(50);
+    editLE->setText("*");
+    editLE->setReadOnly(true);
+    editLE->setContextMenuPolicy(Qt::PreventContextMenu);
+    editLE->setStyleSheet( "color:black; background-color: #ccccff;" );
 
-    if(x != 0 || y != 0) {
-        vbox->addWidget(edit);
-        type = QUESTFIELD;
-        baseStyle = new QString("background-color: #ccccff;");
-        edit->setStyleSheet(*baseStyle);
-    }
+    editLE->setAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+    editLE->setMaxLength(1);
+
+    QFont * f = new QFont();
+    f->setPointSize(25);
+    edit->setFont(*f);
+
+    baseStyle = new QString("background-color: #ccccff;");
+    edit->setStyleSheet(*baseStyle);
+    vbox->addWidget(edit);
+
+
+    type = SYMBOLFIELD;
 }
 
-
-bool QuestField::decorate(bool force)
+bool SymbolField::decorate(bool force)
 {
     if(force)
         edit->setStyleSheet("background-color: #ffcccc;");
     return false;
 }
 
-
-void QuestField::setText(QString text)
+void SymbolField::setText(QString text)
 {
-    editTE->setText(text);
+    editLE->setText(text);
 }
 
-void QuestField::setRandomText()
+void SymbolField::setRandomText()
 {
-    // hackity hack
-    std::string pole[40] = {
-        "sloni zub", "svazek klesti", "narez", "hnetat", "zesileny zapor", "druh pocitacoveho konektoru",
-        "cast svu", "lezet anglicky", "carodejova zeme", "vytvoren", "ilona domacky", "model",
-        "televizni kabelovy kanal", "amplituda", "kujny material", "sedivy", "osklivost", "chytat zver",
-        "inicialy zpevacky vondrackove", "zasevany", "takove mnozstvi",
-    };
-    editTE->setText(QString(pole[rand()%20].c_str()).toUpper());
+    //
 }
 
-bool QuestField::eventFilter(QObject *watched, QEvent *e)
+
+bool SymbolField::eventFilter(QObject *watched, QEvent *e)
 {
     Q_UNUSED(watched);
     bool filtered = false;
-
     if(e->type() == QEvent::FocusIn) {
+        qDebug() << "Focus SymbolField " << xpos << "x" << ypos;
 
-        qDebug() << "Focus QuestField " << xpos << "x" << ypos;
-
-        if(state == HORIZONTAL) {
-            if((xpos < (policka->at(ypos).count()-1)) && policka->at(ypos)[xpos+1]->type != EDITFIELD)
-                state = ! state;
-            if(xpos == (policka->at(ypos).count()-1))
-                state = ! state;
-        } else if(state == VERTICAL) {
-            if((ypos < (policka->count()-1)) && policka->at(ypos+1)[xpos]->type != EDITFIELD)
-                state = ! state;
-            if(ypos == (policka->count()-1))
-                state = ! state;
-        }
         if (*aktualniNastroj!= UNKNOWNFIELD)
             changeFieldType(*aktualniNastroj);
         else
@@ -139,5 +121,6 @@ bool QuestField::eventFilter(QObject *watched, QEvent *e)
             }
         }
     }
-    return filtered;
+    return filtered & false;
 }
+

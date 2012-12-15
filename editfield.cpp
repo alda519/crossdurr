@@ -52,7 +52,12 @@ bool EditField::eventFilter(QObject *watched, QEvent *e)
     bool filtered = false;
     if(e->type() == QEvent::FocusIn) {
         qDebug() << "Focus EditField " << xpos << "x" << ypos;
-        highlight();
+
+        if (*aktualniNastroj!= UNKNOWNFIELD)
+            changeFieldType(*aktualniNastroj);
+        else
+            highlight();
+        filtered = true;
     }
 
     if (e->type () == QEvent::KeyPress)

@@ -15,13 +15,17 @@ SOURCES += main.cpp\
     otevri.cpp \
     field.cpp \
     editfield.cpp \
-    questfield.cpp
+    questfield.cpp \
+    tajenkafield.cpp \
+    symbolfield.cpp
 
 HEADERS  += mainwindow.h \
     otevri.h \
     field.h \
     editfield.h \
-    questfield.h
+    questfield.h \
+    tajenkafield.h \
+    symbolfield.h
 
 FORMS    += mainwindow.ui \
     otevri.ui
@@ -30,4 +34,5 @@ OTHER_FILES +=
 
 RESOURCES += \
     ikony.qrc \
-    ikony_bonus.qrc
+    ikony_bonus.qrc \
+    ikony_toolbar/ikonyToolbar.qrc

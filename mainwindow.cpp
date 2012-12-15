@@ -3,6 +3,8 @@
 #include "field.h"
 #include "questfield.h"
 #include "editfield.h"
+#include "tajenkafield.h"
+#include "symbolfield.h"
 #include <QString>
 #include <QtCore>
 
@@ -10,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     connect(ui->actionKonec,SIGNAL(activated()), this, SLOT(close()));
     connect(ui->actionOtev_t, SIGNAL(activated()), this, SLOT(otevriKrizovku()));
@@ -44,30 +47,66 @@ void MainWindow::vytvorVytvareciListu()
 
     listaVytvareni = new QVBoxLayout;
       // nastaveni velikosti
-    listaVytvareni->addWidget(new QLabel("Sirka"));
+    listaVytvareni->addWidget(new QLabel("Sirka:"));
     kSirka = new QLineEdit("15");
     kVyska = new QLineEdit("10");
     listaVytvareni->addWidget(kSirka);
-    listaVytvareni->addWidget(new QLabel("Vyska"));
+    listaVytvareni->addWidget(new QLabel("Vyska:"));
     listaVytvareni->addWidget(kVyska);
     QPushButton * newKrizovkaBtn = new QPushButton(QString("Nastavit velikost"));
     listaVytvareni->addWidget(newKrizovkaBtn);
       // tajenka
-    listaVytvareni->addWidget(new QLabel("Tajenka"));
+    listaVytvareni->addWidget(new QLabel("Tajenka:"));
     tAjenka = new QTextEdit("DESNE SUPER TAJENKA");
     tAjenka->setMaximumWidth(160);
     tAjenka->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     listaVytvareni->addWidget(tAjenka);
-    listaVytvareni->addWidget(new QPushButton(QString("Umistit tajenku")));
-        // tooly
-//    listaVytvareni->addWidget(new QRadioButton("AAAA"));
-//    listaVytvareni->addWidget(new QRadioButton("BBBB"));
-//    listaVytvareni->addWidget(new QRadioButton("CCCC"));
+
+    QPushButton *umistiTajenkuBtn = new QPushButton(QString("Umistit tajenku"));
+    listaVytvareni->addWidget(umistiTajenkuBtn);
+
+    // nastrojovy menu
+    listaVytvareni->addWidget(new QLabel("Nastroje:"));
+    radioPismeno = new QRadioButton("Pismeno");
+    radioTajenka = new QRadioButton("Tajenka");
+    radioSymbol = new QRadioButton("Symbol");
+    radioZadani = new QRadioButton("Zadani");
+    radioOznacovani = new QRadioButton("Oznacovani");
+    listaVytvareni->addWidget(radioPismeno);
+    listaVytvareni->addWidget(radioTajenka);
+    listaVytvareni->addWidget(radioSymbol);
+    listaVytvareni->addWidget(radioZadani);
+    listaVytvareni->addWidget(radioOznacovani);
+
+    connect(radioPismeno, SIGNAL(pressed()), this, SLOT(nastavNastrojPismeno()));
+    connect(radioTajenka, SIGNAL(pressed()), this, SLOT(nastavNastrojTajenka()));
+    connect(radioSymbol, SIGNAL(pressed()), this, SLOT(nastavNastrojSymbol()));
+    connect(radioZadani, SIGNAL(pressed()), this, SLOT(nastavNastrojZadani()));
+    connect(radioOznacovani, SIGNAL(pressed()), this, SLOT(nastavNastrojOznacovani()));
+
+    radioPismeno->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/pismeno.png);} \
+                                QRadioButton::indicator::checked {image: url(:/images/pismeno.png);}");
+    radioTajenka->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/tajenka.png);} \
+                                QRadioButton::indicator::checked {image: url(:/images/tajenka.png);}");
+    radioSymbol->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/symbol.png);} \
+                                QRadioButton::indicator::checked {image: url(:/images/symbol.png);}");
+    radioZadani->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/slovo.png);} \
+                                QRadioButton::indicator::checked {image: url(:/images/slovo.png);}");
+    radioOznacovani->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/kurzor.png);} \
+                                QRadioButton::indicator::checked {image: url(:/images/kurzor.png);}");
+
+    setStyleSheet("QRadioButton::checked {border: 2px solid #8f8f91;} \
+    QRadioButton { \
+         border-radius: 6px; \
+         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \
+                                           stop: 0 #f6f7fa, stop: 1 #dadbde); \
+     }  ");
 
 
-     createActions();
-     listaVytvareni->addWidget(tools);
 
+    aktualniNastroj = new int;
+    *aktualniNastroj = OZNACOVANI;
+    radioOznacovani->setChecked(true);
 
       // cervene tlacitko
     QPushButton * finishBtn = new QPushButton("Doplnit prazdne");
@@ -81,6 +120,7 @@ void MainWindow::vytvorVytvareciListu()
     connect(newKrizovkaBtn, SIGNAL(pressed()), this, SLOT(novaKrizovka()));
     connect(finishBtn, SIGNAL(pressed()), this, SLOT(vyplnitNesmyslama()));
     connect(lustitBtn, SIGNAL(pressed()), this, SLOT(zobrazLusticiListu()));
+    connect(umistiTajenkuBtn, SIGNAL(pressed()), this, SLOT(umistitTajenku()));
 
 }
 
@@ -107,38 +147,6 @@ void MainWindow::vytvorLusticiListu()
 
 }
 
-void MainWindow::createActions()
-{
-    actEdit = new QAction("pismeno",this);
-    actEdit->setStatusTip("Prazdne policko pro 1 pismeno");
-    connect(actEdit,SIGNAL(triggered()),this,SLOT(selectEdit()));
-
-    actTajenka = new QAction("tajenka",this);
-    actTajenka->setStatusTip("Prazdne policko pro 1 pismeno tajenky");
-    connect(actTajenka,SIGNAL(triggered()),this,SLOT(selectTajenka()));
-
-    actSymbol = new QAction("symbol",this);
-    actSymbol->setStatusTip("Pro vyplneni rohu");
-    connect(actSymbol,SIGNAL(triggered()),this,SLOT(selectSymbol()));
-
-    actQuest = new QAction("zadani",this);
-    actQuest->setStatusTip("Policko se zadanim pro 1 slovo");
-    connect(actQuest,SIGNAL(triggered()),this,SLOT(selectQuest()));
-
-    actTools = new QActionGroup(this);
-    actTools->addAction(actEdit);
-    actTools->addAction(actTajenka);
-    actTools->addAction(actSymbol);
-    actTools->addAction(actQuest);
-
-    tools = new QToolBar();
-    tools->addAction(actEdit);
-    tools->addAction(actTajenka);
-    tools->addAction(actSymbol);
-    tools->addAction(actQuest);
-
-}
-
 void MainWindow::zobrazVytvareciListu()
 {
     ui->widgetVytvareni->setVisible(true);
@@ -152,24 +160,39 @@ void MainWindow::zobrazLusticiListu()
 
 }
 
-void MainWindow::selectEdit()
+void MainWindow::umistitTajenku()
 {
-    qDebug() << "edit" << endl;
+    // doplnit
 }
 
-void MainWindow::selectTajenka()
+void MainWindow::nastavNastrojPismeno()
 {
-    qDebug() << "tajenka" << endl;
+    *aktualniNastroj = EDITFIELD;
 }
 
-void MainWindow::selectSymbol()
+void MainWindow::nastavNastrojTajenka()
 {
-    qDebug() << "symbol" << endl;
+    *aktualniNastroj = TAJENKAFIELD;
 }
 
-void MainWindow::selectQuest()
+void MainWindow::nastavNastrojZadani()
 {
-    qDebug() << "quest" << endl;
+    *aktualniNastroj = QUESTFIELD;
+}
+
+void MainWindow::nastavNastrojSymbol()
+{
+     *aktualniNastroj = SYMBOLFIELD;
+}
+
+void MainWindow::nastavNastrojOznacovani()
+{
+     *aktualniNastroj = OZNACOVANI;
+}
+
+void MainWindow::smazWidget(int x, int y)
+{
+    ui->fields->removeWidget(ui->fields->itemAtPosition(y,x)->widget());
 }
 
 void MainWindow::otevriKrizovku()
@@ -203,12 +226,19 @@ void MainWindow::novaKrizovka()
             Field * policko;
             // po okraji jsou rovnou policka s
             if(i == 0 || j == 0 || i + 3 == j || 13- i == j) {
-                policko = new QuestField(j, i, policka);
+                if ((i == 0) && (j == 0))
+                    policko = new SymbolField(j, i, policka);
+                else
+                    policko = new QuestField(j, i, policka);
+                policko->mrizka = ui->fields;
+                policko->aktualniNastroj = aktualniNastroj;
             } else {
                 policko = new EditField(j, i, policka);
+                policko->mrizka = ui->fields;
+                policko->aktualniNastroj = aktualniNastroj;
             }
             policka_buf->append(policko);
-            ui->fields->addWidget(policko,i,j,1,1);
+            ui->fields->addWidget(policko,i,j,1,1);            
         }
         policka->append(*policka_buf);
     }
