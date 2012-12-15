@@ -130,15 +130,20 @@ void MainWindow::vytvorVytvareciListu()
 void MainWindow::vytvorLusticiListu()
 {
     listaLusteni = new QVBoxLayout;
-      // nastaveni velikosti
 
-      // tajenka
-    listaLusteni->addWidget(new QLabel("Tajenka"));
+    // napovedy
+    listaLusteni->addWidget(new QLabel("Napovedy"));
+    QTextEdit *napovedy = new QTextEdit("ITU ITO IZU IPZ UNP INC IMP");
+    napovedy->setMaximumWidth(160);
+    napovedy->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    listaLusteni->addWidget(napovedy);
+
+    // tajenka
+    listaLusteni->addWidget(new QLabel("Kontext Tajenky"));
     tAjenka = new QTextEdit("DESNE SUPER TAJENKA");
     tAjenka->setMaximumWidth(160);
     tAjenka->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     listaLusteni->addWidget(tAjenka);
-    listaLusteni->addWidget(new QPushButton(QString("Umistit tajenku")));
 
     QPushButton * editorBtn = new QPushButton("Zpet do editoru");
     editorBtn->setStyleSheet("background-color: #ff3333;");
