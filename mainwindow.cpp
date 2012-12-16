@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     krizovkaWidth = 0;
     krizovkaHeight = 0;
 
-    setMinimumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
-    setMaximumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
+    //setMinimumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
+    //setMaximumSize(40 + 160 + 5 * 52, 250 + 5 * 52);
 
     vytvorLusticiListu();
     vytvorVytvareciListu();
@@ -84,25 +84,32 @@ void MainWindow::vytvorVytvareciListu()
     connect(radioZadani, SIGNAL(pressed()), this, SLOT(nastavNastrojZadani()));
     connect(radioOznacovani, SIGNAL(pressed()), this, SLOT(nastavNastrojOznacovani()));
 
+
     radioPismeno->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/pismeno.png);} \
-                                QRadioButton::indicator::checked {image: url(:/images/pismeno.png);}");
+                                QRadioButton::indicator::checked {image: url(:/images/pismeno.png);} ");
+
     radioTajenka->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/tajenka.png);} \
                                 QRadioButton::indicator::checked {image: url(:/images/tajenka.png);}");
+
     radioSymbol->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/symbol.png);} \
                                 QRadioButton::indicator::checked {image: url(:/images/symbol.png);}");
+
     radioZadani->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/slovo.png);} \
                                 QRadioButton::indicator::checked {image: url(:/images/slovo.png);}");
+
     radioOznacovani->setStyleSheet(" QRadioButton::indicator::unchecked {image: url(:/images/kurzor.png);} \
                                 QRadioButton::indicator::checked {image: url(:/images/kurzor.png);}");
+
 
     setStyleSheet("QRadioButton::checked {border: 2px solid #8f8f91;} \
     QRadioButton { \
          border-radius: 6px; \
          background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \
-                                           stop: 0 #f6f7fa, stop: 1 #dadbde); \
-     }  ");
+                                           stop: 0 #f6f7fa, stop: 1 #dadbde);} \
+    ");
 
 
+               //QRadioButton::indicator { width: 25px; height: 25px;} \
 
     aktualniNastroj = new int;
     *aktualniNastroj = OZNACOVANI;
