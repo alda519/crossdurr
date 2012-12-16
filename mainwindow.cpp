@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->actionKonec,SIGNAL(activated()), this, SLOT(close()));
     connect(ui->actionOtev_t, SIGNAL(activated()), this, SLOT(otevriKrizovku()));
+    connect(ui->actionUlo_it, SIGNAL(activated()), this, SLOT(ulozKrizovku()));
 
     krizovkaWidth = 0;
     krizovkaHeight = 0;
@@ -210,7 +211,33 @@ void MainWindow::smazWidget(int x, int y)
 void MainWindow::otevriKrizovku()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        QString::fromUtf8("Otevři Křížovku"), "", "Soubory XML(*.xml)");
+                                                    QString::fromUtf8("Otevři Křížovku"), "", "Soubory XML(*.xml)");
+}
+
+void MainWindow::ulozKrizovku()
+{
+    /*
+    // skryju vytvareci listu kdyz je videt
+    bool x = ui->widgetVytvareni->isVisible();
+    ui->widgetVytvareni->setVisible(false);
+
+    // skryjulustici listu kdyz je videt
+    bool y = ui->widgetLusteni->isVisible();
+    ui->widgetLusteni->setVisible(false);
+    */
+
+    QPixmap pix = QPixmap::grabWidget(centralWidget());
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Ulozit krizovku"), QApplication::applicationDirPath(), tr("Obrazky PNG (*.png)"));
+    if (fileName=="") return;
+
+    pix.save( fileName );
+
+    /*
+    ui->widgetVytvareni->setVisible(x);
+    ui->widgetLusteni->setVisible(y);
+    */
 }
 
 #define MAX(a,b) (((a)>(b))?(a):(b))

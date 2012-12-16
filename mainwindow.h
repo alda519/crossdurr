@@ -44,6 +44,7 @@ private:
 
 public slots:
     void otevriKrizovku();
+    void ulozKrizovku();
     void novaKrizovka();
     void vyplnitNesmyslama();
     void zobrazVytvareciListu();
