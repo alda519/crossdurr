@@ -4,11 +4,10 @@ tajenkaField::tajenkaField(int x, int y, QVector< QVector<Field *> > * fields, Q
     EditField(x, y, fields, parent)
 
 {
-    editLE->setStyleSheet( "color:black; background-color:yellow" );
     type = TAJENKAFIELD;
 
-    baseStyle = new QString;
-    *baseStyle = "color:black; background-color:yellow";
+    baseStyle = new QString("color:black; background-color:yellow; border-width: 1px; border-style: solid; border-radius: 4px; border-color: rgb(196,193,189);");
+    editLE->setStyleSheet( *baseStyle );
 }
 
 bool tajenkaField::decorate(bool force)
@@ -20,5 +19,5 @@ bool tajenkaField::decorate(bool force)
 
 void tajenkaField::setBaseStyleSheet()
 {
-    edit->setStyleSheet(* baseStyle);
+    edit->setStyleSheet(* baseStyle);    
 }

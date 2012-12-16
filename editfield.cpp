@@ -12,8 +12,8 @@ EditField::EditField(int x, int y, QVector< QVector<Field *> > * fields, QWidget
     editLE->setText("");
     editLE->setReadOnly(true);
     editLE->setContextMenuPolicy(Qt::PreventContextMenu);
-    editLE->setStyleSheet( "color:black; background-color:white" );
-
+    baseStyle = new QString("color:black; background-color:white; border-width: 1px; border-style: solid; border-radius: 4px; border-color: rgb(196,193,189);");
+    editLE->setStyleSheet(*baseStyle);
     editLE->setAlignment(Qt::AlignHCenter | Qt::AlignCenter);
     editLE->setMaxLength(1);
 
@@ -44,6 +44,11 @@ void EditField::setRandomText()
     char x = rand() % 26 + 'A';
     if(editLE->text().length() == 0)
         editLE->setText(QString::fromAscii(&x, 1));
+}
+
+void EditField::setBaseStyleSheet()
+{
+    edit->setStyleSheet(*baseStyle);
 }
 
 

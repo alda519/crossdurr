@@ -12,6 +12,7 @@ public:
     bool decorate(bool force = true);
     void setText(QString text = "");
     void setRandomText();
+    void setBaseStyleSheet();
 
 protected:
     bool eventFilter(QObject *watched, QEvent * e);

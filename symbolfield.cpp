@@ -11,8 +11,9 @@ SymbolField::SymbolField(int x, int y, QVector< QVector<Field *> > * fields, QWi
     editLE->setMaximumHeight(50);
     editLE->setText("*");
     editLE->setReadOnly(true);
+    editLE->setFrame(false);
     editLE->setContextMenuPolicy(Qt::PreventContextMenu);
-    editLE->setStyleSheet( "color:black; background-color: #ccccff;" );
+    editLE->setStyleSheet( "color:black; background-color: #ccccff; border: 1px solid grey;" );
 
     editLE->setAlignment(Qt::AlignHCenter | Qt::AlignCenter);
     editLE->setMaxLength(1);
@@ -21,7 +22,7 @@ SymbolField::SymbolField(int x, int y, QVector< QVector<Field *> > * fields, QWi
     f->setPointSize(25);
     edit->setFont(*f);
 
-    baseStyle = new QString("background-color: #ccccff;");
+    baseStyle = new QString("background-color: #ccccff; border: 1px solid grey; border-color: rgb(196,193,189);");
     edit->setStyleSheet(*baseStyle);
     vbox->addWidget(edit);
 
@@ -32,7 +33,7 @@ SymbolField::SymbolField(int x, int y, QVector< QVector<Field *> > * fields, QWi
 bool SymbolField::decorate(bool force)
 {
     if(force)
-        edit->setStyleSheet("background-color: #ffcccc;");
+        edit->setStyleSheet("background-color: #ffcccc; border: 1px solid grey;");
     return false;
 }
 

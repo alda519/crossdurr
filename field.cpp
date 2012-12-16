@@ -123,6 +123,7 @@ void Field::changeFieldType(int newType)
         // a jeste se prohodi stary s novym v matici policek
         (*policka)[ypos].replace(xpos,newField);
 
+        this->hide();
         // chtelo by to neco jako toto, jinak to bude celkem slusne leakovat
         //delete this;
 
